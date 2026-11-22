@@ -5,6 +5,7 @@ import { PlayIcon } from "lucide-react";
 import { SettingContainer } from "../ui/SettingContainer";
 import { useSettingsStore } from "../../stores/settingsStore";
 import { useSettings } from "../../hooks/useSettings";
+import type { SoundTheme } from "@/bindings";
 
 interface SoundPickerProps {
   label: string;
@@ -29,6 +30,8 @@ export const SoundPicker: React.FC<SoundPickerProps> = ({
   }, [checkCustomSounds]);
 
   const options: DropdownOption[] = [
+    // Dispatch: its own railroad sounds, the default (dispatch.rs, v9).
+    { value: "railroad", label: "Railroad" },
     { value: "marimba", label: "Marimba" },
     { value: "pop", label: "Pop" },
   ];
@@ -54,7 +57,7 @@ export const SoundPicker: React.FC<SoundPickerProps> = ({
         <Dropdown
           selectedValue={selectedTheme}
           onSelect={(value) =>
-            updateSetting("sound_theme", value as "marimba" | "pop" | "custom")
+            updateSetting("sound_theme", value as SoundTheme)
           }
           options={options}
           onOpen={checkCustomSounds}

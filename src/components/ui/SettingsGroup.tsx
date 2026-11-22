@@ -23,7 +23,7 @@ export const SettingsGroup: React.FC<SettingsGroupProps> = ({
           )}
         </div>
       )}
-      <div className="bg-background border border-line rounded-lg overflow-visible">
+      <div className="bg-[var(--color-card)] border border-line rounded-lg overflow-visible">
         <div className="divide-y divide-line">{children}</div>
       </div>
     </div>

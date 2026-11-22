@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "dispatch",
+  "description": "Dispatch's own windows: the read-aloud pill and the splash screen",
+  "windows": ["dispatch_reading", "dispatch_splash"],
+  "permissions": ["core:default", "store:default"]
+}

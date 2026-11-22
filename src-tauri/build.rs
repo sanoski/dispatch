@@ -1,3 +1,8 @@
+#[path = "build_support/dev_runtime.rs"]
+mod dev_runtime;
+#[path = "build_support/dispatch_i18n.rs"]
+mod dispatch_i18n;
+
 fn main() {
     #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
     build_apple_intelligence_bridge();
@@ -36,7 +41,10 @@ fn main() {
     // Must run after transcribe staging because that helper recreates transcribe-libs/.
     stage_vc_runtime_dlls();
 
-    tauri_build::build()
+    tauri_build::build();
+
+    // tauri-build misses target/debug under cargo's newer build-dir layout.
+    dev_runtime::copy_dev_runtime_files();
 }
 
 /// Link clang's compiler runtime, which provides `__isPlatformVersionAtLeast`.
@@ -308,6 +316,7 @@ fn generate_tray_translations() {
             translations.insert(lang, tray);
         }
     }
+    dispatch_i18n::apply_english_tray_overrides(&mut translations);
 
     // English defines the schema
     let english = translations.get("en").unwrap().as_object().unwrap();

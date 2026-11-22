@@ -1,8 +1,31 @@
 {
+  "productName": "Dispatch",
+  "mainBinaryName": "dispatch",
+  "version": "0.1.0",
+  "identifier": "com.ironfrostlabs.dispatch",
   "bundle": {
+    "createUpdaterArtifacts": false,
     "resources": {
       "resources": "resources",
-      "transcribe-libs": "."
+      "transcribe-libs": ".",
+      "../NOTICE.md": "NOTICE.md",
+      "../licenses/*": "licenses/"
+    },
+    "windows": {
+      "signCommand": null,
+      "nsis": {
+        "sidebarImage": "installer/dispatch-sidebar.bmp",
+        "headerImage": "installer/dispatch-header.bmp"
+      },
+      "wix": {
+        "dialogImagePath": "installer/dispatch-msi-dialog.bmp",
+        "bannerPath": "installer/dispatch-msi-banner.bmp"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": []
     }
   }
 }

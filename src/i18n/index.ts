@@ -2,6 +2,11 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { locale } from "@tauri-apps/plugin-os";
 import { LANGUAGE_METADATA } from "./languages";
+import {
+  applyDispatchOverrides,
+  dispatchPostProcessor,
+  DISPATCH_POST_PROCESSOR,
+} from "./dispatch";
 import { commands } from "@/bindings";
 import {
   getLanguageDirection,
@@ -87,10 +92,12 @@ export const getSupportedLanguage = (
 
 // Initialize i18n with English as default
 // Language will be synced from settings after init
+i18n.use(dispatchPostProcessor);
 i18n.use(initReactI18next).init({
   resources,
   lng: "en",
   fallbackLng: "en",
+  postProcess: [DISPATCH_POST_PROCESSOR],
   interpolation: {
     escapeValue: false, // React already escapes values
   },
@@ -98,6 +105,7 @@ i18n.use(initReactI18next).init({
     useSuspense: false, // Disable suspense for SSR compatibility
   },
 });
+applyDispatchOverrides(i18n);
 
 // Sync language from app settings
 export const syncLanguageFromSettings = async () => {

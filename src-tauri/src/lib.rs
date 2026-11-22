@@ -9,6 +9,23 @@ mod chinese_script;
 pub mod cli;
 mod clipboard;
 mod commands;
+mod dispatch;
+mod dispatch_achievements;
+mod dispatch_audio;
+mod dispatch_banter;
+mod dispatch_cleanup_setup;
+mod dispatch_denoise;
+mod dispatch_fixes;
+mod dispatch_names;
+mod dispatch_reading_pill;
+mod dispatch_review;
+mod dispatch_selection;
+mod dispatch_spacing;
+mod dispatch_splash;
+mod dispatch_timings;
+mod dispatch_tts;
+mod dispatch_voice_files;
+mod dispatch_word_align;
 pub mod engine_supervisor;
 mod helpers;
 mod input;
@@ -260,7 +277,7 @@ fn initialize_core_logic(app_handle: &AppHandle) {
             )
             .unwrap(),
         )
-        .tooltip(tray::tray_tooltip())
+        .tooltip(tray::tray_tooltip(app_handle))
         .icon_as_template(true);
 
     // Windows notification-area convention: left click opens the app, right click
@@ -719,6 +736,36 @@ pub fn run(cli_args: CliArgs) {
             shortcut::change_auto_submit_setting,
             shortcut::change_auto_submit_key_setting,
             shortcut::change_post_process_enabled_setting,
+            commands::dispatch::change_post_process_timeout_setting,
+            commands::dispatch::change_clean_up_dictation_setting,
+            commands::dispatch::get_cleanup_setup,
+            commands::dispatch::check_cleanup_setup,
+            commands::dispatch::change_smart_spacing_setting,
+            commands::dispatch::change_fix_rules_setting,
+            commands::dispatch::change_read_aloud_voice_setting,
+            commands::dispatch::change_read_aloud_speed_setting,
+            commands::dispatch::get_read_aloud_voices,
+            commands::dispatch::preview_read_aloud_voice,
+            commands::dispatch::get_dictation_review,
+            commands::dispatch::get_quiet_dictation_audio,
+            commands::dispatch::set_dictation_checked,
+            commands::dispatch::get_audio_cleanup_preview,
+            commands::dispatch::change_keep_all_audio_setting,
+            commands::dispatch::get_dictation_summaries,
+            commands::dispatch::get_dictation_count,
+            commands::dispatch::save_dictation_fix,
+            commands::dispatch::fit_review_window,
+            commands::dispatch::main_window_ready,
+            commands::dispatch::get_achievements,
+            commands::dispatch::mark_achievements_seen,
+            commands::dispatch::stop_read_aloud,
+            commands::dispatch::get_voice_files_status,
+            commands::dispatch::download_voice_files,
+            commands::dispatch::cancel_voice_files_download,
+            commands::dispatch::open_read_aloud_page,
+            commands::dispatch::read_text_aloud,
+            commands::dispatch::change_read_back_setting,
+            commands::dispatch::get_reading_pill_state,
             shortcut::change_experimental_enabled_setting,
             shortcut::change_post_process_base_url_setting,
             shortcut::change_post_process_api_format_setting,
@@ -1018,7 +1065,7 @@ pub fn run(cli_args: CliArgs) {
             // for portable mode (redirects WebView2 cache to portable Data dir)
             let mut win_builder =
                 tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("/".into()))
-                    .title("Handy")
+                    .title(app.package_info().name.clone())
                     .inner_size(utils::MAIN_WINDOW_SIZE.0, utils::MAIN_WINDOW_SIZE.1)
                     .min_inner_size(utils::MAIN_WINDOW_SIZE.0, utils::MAIN_WINDOW_SIZE.1)
                     .resizable(true)
@@ -1103,6 +1150,13 @@ pub fn run(cli_args: CliArgs) {
             app.manage(TranscriptionCoordinator::new(app_handle.clone()));
 
             initialize_core_logic(&app_handle);
+            dispatch::warm_up_cleanup_model(&app_handle);
+            dispatch_timings::start(&app_handle);
+            dispatch_achievements::start(&app_handle);
+            dispatch_reading_pill::create(&app_handle);
+            dispatch_tts::start_read_back(&app_handle);
+            dispatch_audio::start(&app_handle);
+            dispatch_cleanup_setup::start(&app_handle);
 
             // Secure Input monitor (macOS): detects stuck secure input that
             // silently blocks keyed shortcuts, warns the user, and activates
@@ -1149,7 +1203,8 @@ pub fn run(cli_args: CliArgs) {
             // Keep in sync with `apply_startup_activation_policy` (macOS).
             let tray_available = settings.show_tray_icon && !cli_args.no_tray;
             if should_force_show || !should_hide || !tray_available {
-                show_main_window(&app_handle);
+                // Dispatch: behind a splash screen (dispatch_splash.rs).
+                dispatch_splash::show_main_window(&app_handle, show_main_window);
             }
 
             Ok(())

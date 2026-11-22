@@ -927,6 +927,9 @@ fn paste_as_configured(
     let paste_delay_ms = settings.paste_delay_ms;
     let paste_delay_after_ms = settings.paste_delay_after_ms;
 
+    // Dispatch: a space before the text when it would butt against a word.
+    let text = crate::dispatch_spacing::with_leading_space(text, settings.dispatch_smart_spacing);
+
     // Append trailing space if setting is enabled
     let text = if settings.append_trailing_space {
         format!("{} ", text)

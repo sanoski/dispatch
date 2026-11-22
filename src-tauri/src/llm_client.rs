@@ -117,6 +117,10 @@ struct ChatCompletionRequest {
     stream: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     response_format: Option<ResponseFormat>,
+    /// Dispatch: 0 for local cleanup models, so the same dictation always gets
+    /// the same cleanup (see `dispatch::cleanup_temperature`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    temperature: Option<f32>,
     #[serde(flatten)]
     reasoning: ReasoningParams,
 }
@@ -466,6 +470,7 @@ pub async fn send_chat_completion_with_schema(
         stream: false,
         response_format,
         reasoning,
+        temperature: crate::dispatch::cleanup_temperature(provider),
     };
 
     let mut response = client
@@ -741,6 +746,7 @@ mod tests {
             stream: false,
             response_format: None,
             reasoning,
+            temperature: None,
         };
         serde_json::to_value(&request).unwrap()
     }

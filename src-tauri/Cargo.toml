@@ -59,6 +59,16 @@ rodio = { version = "0.23.0", default-features = false, features = ["playback", 
 # Decodes files for transcription. rodio's version, plus the M4A/MP4 (AAC,
 # ALAC) and AIFF support rodio leaves out.
 symphonia = { version = "0.5.5", features = ["aac", "alac", "isomp4", "mp3", "aiff"] }
+# Dispatch: read aloud (dispatch_tts.rs). Kokoro on ONNX Runtime, with a pure
+# Rust port of Kokoro's own pronunciation rules: no Python, no GPL code.
+loqui-kokoro = "0.4.0"
+loqui-g2p = "0.4.0"
+# Dispatch: quiets background noise when playing a dictation back
+# (dispatch_denoise.rs). A pure Rust port of RNNoise, BSD-3.
+nnnoiseless = { version = "0.5.2", default-features = false }
+# Dispatch: old recordings go to the Recycle Bin, not straight to deletion
+# (dispatch_audio.rs), so a mistaken switch can be undone. MIT.
+trash = "5.4.0"
 # Opus (most .ogg/.opus/.webm voice notes), which symphonia can't decode.
 # Builds libopus from source with cmake. 0.2 is the last for symphonia 0.5;
 # 0.2.3 and older drop 120 ms stereo packets (too small a buffer).
@@ -125,6 +135,8 @@ windows = { version = "0.61.3", features = [
   "Win32_Foundation",
   "Win32_Graphics_Gdi",
   "Win32_UI_WindowsAndMessaging",
+  "Win32_UI_Accessibility", # Dispatch: smart spacing (dispatch_spacing.rs)
+  "Win32_UI_Input_KeyboardAndMouse", # Dispatch: copying the selection (dispatch_selection.rs)
 ] }
 winreg = "0.55"
 

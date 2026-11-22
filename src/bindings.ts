@@ -248,6 +248,267 @@ async changePostProcessEnabledSetting(enabled: boolean) : Promise<Result<null, s
     else return { status: "error", error: e  as any };
 }
 },
+async changePostProcessTimeoutSetting(seconds: number) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_post_process_timeout_setting", { seconds }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * What the cleanup setup card in Settings shows (dispatch_cleanup_setup.rs).
+ */
+async getCleanupSetup() : Promise<CleanupSetup> {
+    return await TAURI_INVOKE("get_cleanup_setup");
+},
+/**
+ * The card's "Check again": asks Ollama now, and switches cleanup back on
+ * if it was waiting for Ollama or its model.
+ */
+async checkCleanupSetup() : Promise<CleanupSetup> {
+    return await TAURI_INVOKE("check_cleanup_setup");
+},
+async changeCleanUpDictationSetting(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_clean_up_dictation_setting", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeSmartSpacingSetting(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_smart_spacing_setting", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeFixRulesSetting(rules: FixRule[]) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_fix_rules_setting", { rules }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeReadAloudVoiceSetting(voice: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_read_aloud_voice_setting", { voice }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeReadAloudSpeedSetting(speed: number) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_read_aloud_speed_setting", { speed }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * The Kokoro voices read aloud can use, such as "bm_george".
+ */
+async getReadAloudVoices() : Promise<string[]> {
+    return await TAURI_INVOKE("get_read_aloud_voices");
+},
+/**
+ * Plays a short sample of a voice at the current speed.
+ */
+async previewReadAloudVoice(voice: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("preview_read_aloud_voice", { voice }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * The review window's view of one dictation: waveform, timed words, fixes.
+ */
+async getDictationReview(fileName: string, heardText: string, cleanedText: string | null) : Promise<Result<DictationReview, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_dictation_review", { fileName, heardText, cleanedText }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * The review window's "Quiet background": a copy of the recording with the
+ * background noise quieted, made the first time (about a second).
+ */
+async setDictationChecked(fileName: string, heardText: string, cleanedText: string | null, checked: boolean) : Promise<Result<DictationReview, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("set_dictation_checked", { fileName, heardText, cleanedText, checked }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * What switching to "keep only the newest recordings" would move to the
+ * Recycle Bin now, so the page can ask first.
+ */
+async getAudioCleanupPreview() : Promise<Result<AudioCleanup, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_audio_cleanup_preview") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Keep every recording, or only the newest (older audio goes to the Recycle
+ * Bin; transcripts stay).
+ */
+async changeKeepAllAudioSetting(keepAll: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_keep_all_audio_setting", { keepAll }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async getQuietDictationAudio(fileName: string) : Promise<Result<QuietCopy, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_quiet_dictation_audio", { fileName }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * How many dictations History holds in all, for the count by its title.
+ */
+async getDictationCount() : Promise<Result<number, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_dictation_count") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Length, a little waveform and the fix count for each listed dictation.
+ */
+async getDictationSummaries(entries: SummaryRequest[]) : Promise<Result<DictationSummary[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_dictation_summaries", { entries }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Replaces the heard words `first..=last` with `meant` and returns the
+ * updated review. With `add_rule`, also adds it to the Fix-It List.
+ */
+async saveDictationFix(fileName: string, heardText: string, cleanedText: string | null, first: number, last: number, meant: string, addRule: boolean) : Promise<Result<DictationReview, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("save_dictation_fix", { fileName, heardText, cleanedText, first, last, meant, addRule }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * The main window's page has loaded: the splash screen can make way for it
+ * (dispatch_splash.rs).
+ */
+async mainWindowReady() : Promise<void> {
+    await TAURI_INVOKE("main_window_ready");
+},
+/**
+ * Opening History: grows the main window to fit the review window's three
+ * columns, if the screen has room. Never shrinks it, and does nothing when
+ * it's maximized or already big enough.
+ */
+async fitReviewWindow() : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("fit_review_window") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Everything the Achievements page shows.
+ */
+async getAchievements() : Promise<Result<AchievementsStatus, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_achievements") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Marks achievements' unlock pop-ups as shown.
+ */
+async markAchievementsSeen(ids: string[]) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("mark_achievements_seen", { ids }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * The read-aloud pill's Stop button.
+ */
+async stopReadAloud() : Promise<void> {
+    await TAURI_INVOKE("stop_read_aloud");
+},
+/**
+ * Whether George's voice files are downloaded, and any download's progress.
+ */
+async getVoiceFilesStatus() : Promise<VoiceFilesStatus> {
+    return await TAURI_INVOKE("get_voice_files_status");
+},
+/**
+ * Starts downloading George's voice files (about 340 MB) in the background.
+ */
+async downloadVoiceFiles() : Promise<void> {
+    await TAURI_INVOKE("download_voice_files");
+},
+async cancelVoiceFilesDownload() : Promise<void> {
+    await TAURI_INVOKE("cancel_voice_files_download");
+},
+/**
+ * The pill's "Set up" button: opens the Read Aloud page.
+ */
+async openReadAloudPage() : Promise<void> {
+    await TAURI_INVOKE("open_read_aloud_page");
+},
+/**
+ * Reads text pasted into the Read Aloud page, stopping anything being read.
+ */
+async readTextAloud(text: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("read_text_aloud", { text }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async changeReadBackSetting(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_read_back_setting", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * What the read-aloud pill shows now (the pill's page asks when it loads).
+ */
+async getReadingPillState() : Promise<PillState> {
+    return await TAURI_INVOKE("get_reading_pill_state");
+},
 async changeExperimentalEnabledSetting(enabled: boolean) : Promise<Result<null, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("change_experimental_enabled_setting", { enabled }) };
@@ -1038,10 +1299,8 @@ async updateRecordingRetentionPeriod(period: string) : Promise<Result<null, stri
 }
 },
 /**
- * Checks if the Mac is a laptop by detecting battery presence
- * 
- * This uses pmset to check for battery information.
- * Returns true if a battery is detected (laptop), false otherwise (desktop)
+ * Stub implementation for non-macOS platforms
+ * Always returns false since laptop detection is macOS-specific
  */
 async isLaptop() : Promise<Result<boolean, string>> {
     try {
@@ -1097,12 +1356,69 @@ transcriptionJob: "transcription-job"
 /** user-defined types **/
 
 /**
+ * One achievement as the page shows it.
+ */
+export type Achievement = { id: string; section: AchievementSection; 
+/**
+ * Unix seconds, when it was earned.
+ */
+unlocked_at: number | null; 
+/**
+ * Its unlock pop-up has been shown.
+ */
+seen: boolean; 
+/**
+ * Progress toward it, for the ones with a count (never for hidden ones).
+ */
+have: number | null; need: number | null }
+/**
+ * Where an achievement sits on the page.
+ */
+export type AchievementSection = "milestones" | "habits" | "features" | "hidden" | "voice_data"
+/**
+ * Everything the Achievements page shows.
+ */
+export type AchievementsStatus = { achievements: Achievement[]; 
+/**
+ * Recorded audio across every dictation, in milliseconds.
+ */
+recorded_ms: number; 
+/**
+ * Audio of the dictations checked in the review window (marked "Looks
+ * right" or with a word fixed): the best training data, since their text
+ * is known to be right.
+ */
+checked_ms: number; 
+/**
+ * Whether every recording is kept. With only the newest few kept, the
+ * voice data meter and the training tiers don't apply, and the page hides
+ * them (`dispatch_audio`).
+ */
+keeps_all_audio: boolean;
+/**
+ * Recorded audio per day over the last couple of weeks (or since the
+ * first dictation, if that's sooner). None before the first dictation.
+ */
+per_day_ms: number | null; dictations: number; words: number; days_used: number }
+/**
  * The container-level `serde(default)` (backed by the `Default` impl below)
  * guarantees every field — including ones added in the future — falls back to
  * its `get_default_settings()` value when missing from a stored settings
  * object, so a partial store can never fail the whole load (#1619).
  * Field-level defaults below take precedence where present.
  */
+/**
+ * What switching to "keep the newest" would move to the Recycle Bin now.
+ */
+export type AudioCleanup = { recordings: number;
+/**
+ * Their total length.
+ */
+duration_ms: number; bytes: number;
+/**
+ * How many are kept: [`NEWEST_KEPT`].
+ */
+kept: number }
 export type AppSettings = { 
 /**
  * Internal settings schema marker for one-time migrations. Fresh installs
@@ -1185,7 +1501,55 @@ language_detection_window_secs?: number;
  * not gated on this — that follows model capability. Migrated from the old
  * `overlay_position` (position `none` → style `None`).
  */
-overlay_style?: OverlayStyle }
+overlay_style?: OverlayStyle; 
+/**
+ * Seconds to wait for the cleanup model before pasting the raw transcript.
+ */
+post_process_timeout_secs?: number; 
+/**
+ * Which step of Dispatch's defaults this store has had applied.
+ */
+dispatch_defaults_version?: number; 
+/**
+ * Clean up every dictation with the cleanup model, not only the ones
+ * started with the cleanup hotkey.
+ */
+dispatch_clean_up_dictation?: boolean; 
+/**
+ * Put a space before pasted text when the cursor sits right after a word.
+ */
+dispatch_smart_spacing?: boolean; 
+/**
+ * The fix-it list: exact replacements applied to every transcript.
+ */
+dispatch_fixes?: FixRule[]; 
+/**
+ * The Kokoro voice read aloud uses, such as "bm_george".
+ */
+dispatch_read_aloud_voice?: string; 
+/**
+ * How fast read aloud speaks, 1.0 being normal.
+ */
+dispatch_read_aloud_speed?: number; 
+/**
+ * Read each dictation back after it's pasted (off by default).
+ */
+dispatch_read_back?: boolean;
+/**
+ * Keep every recording (training data), or only the newest few, keeping
+ * every transcript either way (`dispatch_audio`).
+ */
+dispatch_keep_all_audio?: boolean; 
+/**
+ * Cleanup has reached its Ollama model at least once, or this install
+ * predates the setup check (`dispatch_cleanup_setup`).
+ */
+dispatch_cleanup_verified?: boolean; 
+/**
+ * The setup check switched Clean Up Dictation off because Ollama or its
+ * model was missing; it switches it back on once they're found.
+ */
+dispatch_cleanup_paused?: boolean }
 export type AudioDevice = { index: string; name: string; is_default: boolean }
 export type AutoSubmitKey = "enter" | "ctrl_enter" | "cmd_enter"
 export type AutoUnavailableReason = 
@@ -1220,8 +1584,84 @@ export type ChineseScript =
  * Traditional, in Hong Kong's standard forms.
  */
 "traditional_hk"
+/**
+ * What's missing for cleanup.
+ */
+export type CleanupProblem = 
+/**
+ * Ollama didn't answer: not installed, or not running.
+ */
+"no_ollama" | 
+/**
+ * Ollama is running, but the cleanup model isn't downloaded.
+ */
+"no_model"
+/**
+ * What the Settings card shows.
+ */
+export type CleanupSetup = { 
+/**
+ * Show the setup card.
+ */
+show: boolean; problem: CleanupProblem | null; 
+/**
+ * The model to download, such as "qwen3.5:4b".
+ */
+model: string }
 export type ClipboardHandling = "dont_modify" | "copy_to_clipboard"
 export type CustomSounds = { start: boolean; stop: boolean }
+/**
+ * Everything the review window shows for one dictation.
+ */
+export type DictationReview = { duration_ms: number; 
+/**
+ * Loudness per slice of the clip, 0 to 1.
+ */
+waveform: number[]; 
+/**
+ * What the speech model heard, with the user's fixes applied.
+ */
+heard: ReviewWord[]; 
+/**
+ * The cleaned text, lined up with the heard words; `None` when the
+ * dictation wasn't cleaned up.
+ */
+cleaned: ReviewWord[] | null; 
+/**
+ * What the times came from: a model's file name, or "estimate".
+ */
+timing_source: string; fix_count: number; 
+/**
+ * The recording's loudest sample, 0 to 1. Playback is turned up by
+ * this much so quiet recordings are easy to hear; the file isn't changed.
+ */
+peak: number;
+/**
+ * Marked "Looks right": the user checked the text (after any fixes) and
+ * it's what they said.
+ */
+checked: boolean;
+/**
+ * False when the recording was deleted to save space (`dispatch_audio`):
+ * the words are shown, but there's nothing to play.
+ */
+has_audio: boolean }
+/**
+ * A list item's extras.
+ */
+export type DictationSummary = { file_name: string; duration_ms: number; spark: number[]; fix_count: number; checked: boolean }
+/**
+ * One fix-it rule.
+ */
+export type FixRule = { 
+/**
+ * What the speech model writes, e.g. "quad code".
+ */
+heard: string; 
+/**
+ * What was meant, e.g. "Claude Code".
+ */
+meant: string }
 export type GpuDeviceOption = { id: string; name: string; total_vram_mb: number }
 export type HistoryEntry = { id: number; file_name: string; timestamp: number; saved: boolean; title: string; transcription_text: string; post_processed_text: string | null; post_process_prompt: string | null; post_process_requested: boolean; 
 /**
@@ -1393,6 +1833,26 @@ export type PaginatedHistory = { entries: HistoryEntry[]; has_more: boolean }
 export type PasteMethod = "ctrl_v" | "direct" | "none" | "shift_insert" | "ctrl_shift_v" | "external_script"
 export type PermissionAccess = "allowed" | "denied" | "unknown"
 /**
+ * What the pill shows.
+ */
+export type PillState = { state: "hidden" } | 
+/**
+ * Kokoro is loading (the first read after starting Dispatch).
+ */
+{ state: "warming"; voice: string } | 
+/**
+ * Speaking the selection.
+ */
+{ state: "reading"; voice: string } | 
+/**
+ * George is answering an empty selection.
+ */
+{ state: "nothing_selected" } | 
+/**
+ * George's voice files aren't downloaded yet; the pill offers to.
+ */
+{ state: "needs_voice" }
+/**
  * Request format a post-processing endpoint speaks. Built-in providers have a
  * fixed format; only the custom provider lets the user change it.
  */
@@ -1406,6 +1866,19 @@ export type PostProcessApiFormat =
  */
 "anthropic"
 export type PostProcessProvider = { id: string; label: string; base_url: string; allow_base_url_edit?: boolean; models_endpoint?: string | null; supports_structured_output?: boolean; api_format?: PostProcessApiFormat }
+/**
+ * A recording with its background quieted, for the review window's "Quiet
+ * background" switch (`dispatch_denoise`).
+ */
+export type QuietCopy = {
+/**
+ * The cleaned copy, a WAV file the window plays instead.
+ */
+path: string;
+/**
+ * Its loudest sample, for the playback boost.
+ */
+peak: number }
 /**
  * Recording phase events for windows that follow along (onboarding's Try it).
  */
@@ -1433,6 +1906,24 @@ export type RecordingStateEvent = { phase: RecordingPhase }
  * A retired ONNX model found on disk.
  */
 export type RetiredModel = { id: string; name: string; size_mb: number; replacement_repo: string }
+/**
+ * One word as the review window shows it.
+ */
+export type ReviewWord = { text: string; start_ms: number; end_ms: number; 
+/**
+ * "aligned" or "estimated": how sure the time is.
+ */
+precision: string; 
+/**
+ * The range of words in what the model heard that this word stands for
+ * (more than one when a fix replaced several). In the cleaned view, the
+ * heard words it lines up with; `None` when it lines up with none.
+ */
+heard_first: number | null; heard_last: number | null; 
+/**
+ * Set when this word is a fix: what the model heard there.
+ */
+fixed_from: string | null }
 export type SecretMap = Partial<{ [key in string]: string }>
 export type SecureInputStatus = { 
 /**
@@ -1485,7 +1976,7 @@ export type ShortcutActivation =
  */
 "hold_or_toggle"
 export type ShortcutBinding = { id: string; name: string; description: string; default_binding: string; current_binding: string }
-export type SoundTheme = "marimba" | "pop" | "custom"
+export type SoundTheme = "marimba" | "pop" | "custom" | "railroad"
 /**
  * Phase of the streaming overlay card, emitted to drive its UI state.
  */
@@ -1518,6 +2009,10 @@ export type StreamTextEvent = { committed: string; tentative: string }
  * Semantic kind of "working" phase, used to localize the spinner label.
  */
 export type StreamWorkKind = "transcribing" | "polishing"
+/**
+ * A dictation to summarize for the review window's list.
+ */
+export type SummaryRequest = { file_name: string; heard_text: string }
 /**
  * UI appearance mode. `System` follows the OS `prefers-color-scheme`; `Light`
  * and `Dark` force one of the two palettes Handy already ships.
@@ -1567,6 +2062,22 @@ export type TranscriptionOutcome =
 "failed"
 export type TypingTool = "auto" | "wtype" | "kwtype" | "dotool" | "ydotool" | "xdotool"
 export type VadBackend = "silero" | "earshot"
+/**
+ * Where the voice files stand, for the Read Aloud page.
+ */
+export type VoiceFilesStatus = { 
+/**
+ * Downloaded and checked, in Dispatch's data folder.
+ */
+installed: boolean; 
+/**
+ * A debug build reading the repo's `vendor/kokoro/` copy instead.
+ */
+using_dev_copy: boolean; downloading: boolean; downloaded_bytes: number; total_bytes: number; 
+/**
+ * Why the last download stopped, if it failed.
+ */
+error: string | null }
 export type WindowsMicrophonePermissionStatus = { supported: boolean; overall_access: PermissionAccess; device_access: PermissionAccess; app_access: PermissionAccess; desktop_app_access: PermissionAccess }
 
 /** tauri-specta globals **/

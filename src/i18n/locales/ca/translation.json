@@ -1,4 +1,11 @@
 {
+  "dispatch": {
+    "postProcessTimeout": {
+      "title": "Cleanup Time Limit",
+      "description": "How long to wait for the cleanup model. If it takes longer, Dispatch pastes the raw transcript instead.",
+      "seconds": "seconds"
+    }
+  },
   "tray": {
     "settings": "Configuració...",
     "checkUpdates": "Comprova si hi ha actualitzacions...",

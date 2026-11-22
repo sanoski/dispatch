@@ -290,6 +290,9 @@ pub enum SoundTheme {
     Marimba,
     Pop,
     Custom,
+    /// Dispatch: steam releases (resources/railroad_*.wav), Dispatch's
+    /// default (`dispatch` defaults version 9).
+    Railroad,
 }
 
 impl SoundTheme {
@@ -298,6 +301,7 @@ impl SoundTheme {
             SoundTheme::Marimba => "marimba",
             SoundTheme::Pop => "pop",
             SoundTheme::Custom => "custom",
+            SoundTheme::Railroad => "railroad",
         }
     }
 
@@ -572,6 +576,45 @@ pub struct AppSettings {
     /// `overlay_position` (position `none` → style `None`).
     #[serde(default = "default_overlay_style")]
     pub overlay_style: OverlayStyle,
+
+    // --- Dispatch (see dispatch.rs) ---
+    /// Seconds to wait for the cleanup model before pasting the raw transcript.
+    #[serde(default = "crate::dispatch::default_post_process_timeout_secs")]
+    pub post_process_timeout_secs: f64,
+    /// Which step of Dispatch's defaults this store has had applied.
+    #[serde(default)]
+    pub dispatch_defaults_version: u32,
+    /// Clean up every dictation with the cleanup model, not only the ones
+    /// started with the cleanup hotkey.
+    #[serde(default = "crate::dispatch::default_clean_up_dictation")]
+    pub dispatch_clean_up_dictation: bool,
+    /// Put a space before pasted text when the cursor sits right after a word.
+    #[serde(default = "crate::dispatch::default_smart_spacing")]
+    pub dispatch_smart_spacing: bool,
+    /// The fix-it list: exact replacements applied to every transcript.
+    #[serde(default)]
+    pub dispatch_fixes: Vec<crate::dispatch_fixes::FixRule>,
+    /// The Kokoro voice read aloud uses, such as "bm_george".
+    #[serde(default = "crate::dispatch_tts::default_voice")]
+    pub dispatch_read_aloud_voice: String,
+    /// How fast read aloud speaks, 1.0 being normal.
+    #[serde(default = "crate::dispatch_tts::default_speed")]
+    pub dispatch_read_aloud_speed: f32,
+    /// Read each dictation back after it's pasted (off by default).
+    #[serde(default)]
+    pub dispatch_read_back: bool,
+    /// Keep every recording (training data), or only the newest few, keeping
+    /// every transcript either way (`dispatch_audio`).
+    #[serde(default = "crate::dispatch_audio::default_keep_all")]
+    pub dispatch_keep_all_audio: bool,
+    /// Cleanup has reached its Ollama model at least once, or this install
+    /// predates the setup check (`dispatch_cleanup_setup`).
+    #[serde(default)]
+    pub dispatch_cleanup_verified: bool,
+    /// The setup check switched Clean Up Dictation off because Ollama or its
+    /// model was missing; it switches it back on once they're found.
+    #[serde(default)]
+    pub dispatch_cleanup_paused: bool,
 }
 
 fn default_model() -> String {
@@ -1007,6 +1050,7 @@ pub fn get_default_settings() -> AppSettings {
             current_binding: "escape".to_string(),
         },
     );
+    crate::dispatch_tts::add_default_binding(&mut bindings);
 
     AppSettings {
         settings_schema_version: default_settings_schema_version(),
@@ -1076,6 +1120,17 @@ pub fn get_default_settings() -> AppSettings {
         language_detection: LanguageDetectionMode::default(),
         language_detection_window_secs: default_language_detection_window_secs(),
         overlay_style: default_overlay_style(),
+        post_process_timeout_secs: crate::dispatch::default_post_process_timeout_secs(),
+        dispatch_defaults_version: 0,
+        dispatch_clean_up_dictation: crate::dispatch::default_clean_up_dictation(),
+        dispatch_smart_spacing: crate::dispatch::default_smart_spacing(),
+        dispatch_fixes: Vec::new(),
+        dispatch_read_aloud_voice: crate::dispatch_tts::default_voice(),
+        dispatch_read_aloud_speed: crate::dispatch_tts::default_speed(),
+        dispatch_read_back: false,
+        dispatch_keep_all_audio: crate::dispatch_audio::default_keep_all(),
+        dispatch_cleanup_verified: false,
+        dispatch_cleanup_paused: false,
     }
 }
 
@@ -1168,7 +1223,8 @@ pub fn get_settings(app: &AppHandle) -> AppSettings {
         default_settings
     };
 
-    if ensure_post_process_defaults(&mut settings) {
+    let post_process_changed = ensure_post_process_defaults(&mut settings);
+    if crate::dispatch::apply_dispatch_defaults(&mut settings) || post_process_changed {
         store.set("settings", serde_json::to_value(&settings).unwrap());
     }
 
@@ -1472,8 +1528,13 @@ fn self_update_possible() -> bool {
 pub fn update_checks_forced_disabled() -> bool {
     use std::sync::OnceLock;
     static IS_UPDATER_DISABLED: OnceLock<bool> = OnceLock::new();
-    *IS_UPDATER_DISABLED
-        .get_or_init(|| utils::env_flag_enabled("HANDY_DISABLE_UPDATER") || !self_update_possible())
+    // Dispatch has no release feed of its own, and Handy's would replace Dispatch with Handy.
+    const DISPATCH_NO_UPDATE_FEED: bool = true;
+    *IS_UPDATER_DISABLED.get_or_init(|| {
+        DISPATCH_NO_UPDATE_FEED
+            || utils::env_flag_enabled("HANDY_DISABLE_UPDATER")
+            || !self_update_possible()
+    })
 }
 
 /// Effective updater state: the user's stored preference, overridden to `false`

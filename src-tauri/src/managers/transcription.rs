@@ -1720,6 +1720,9 @@ fn post_process_transcription_text(
             None => raw,
         };
 
+        // Dispatch: the fix-it list, on the model's exact output (dispatch_fixes.rs).
+        let raw = crate::dispatch_fixes::apply_and_note(&raw, &settings.dispatch_fixes);
+
         let corrected = if !settings.custom_words.is_empty() && !custom_words_already_prompted {
             apply_custom_words(
                 &raw,

@@ -45,3 +45,17 @@ result
 
 # Python bytecode (scripts/)
 __pycache__/
+
+# Dispatch: local audio for model comparisons (personal voice data, never commit)
+test-clips/
+
+# Dispatch: large third-party model files kept inside the repo folder so
+# Dispatch doesn't depend on other projects (see HANDOFF.md "Read aloud")
+vendor/
+
+# Dispatch: screenshots and footage set aside for the development video
+video-resources/
+
+# Dispatch: the video kit (copied from the screencast kit; VIDEO.md). Local only:
+# it holds the ElevenLabs key file and large media.
+/video/

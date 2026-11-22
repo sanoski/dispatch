@@ -1,0 +1,57 @@
+/* Dispatch: the recording pill's crossing signal (see SignalMark.tsx). Uses
+   the pill's own color variables (RecordingOverlay.css), so it follows the
+   light and dark themes with it. */
+
+/* The signal and the voice bars, side by side as one centered piece. */
+.dsig {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dsig-mark {
+  flex: none;
+  overflow: visible;
+  opacity: 0.8;
+}
+
+.dsig-metal {
+  fill: none;
+  stroke: var(--s-muted);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.dsig-fill {
+  fill: var(--s-muted);
+}
+
+.dsig-dark {
+  fill: var(--s-faint);
+  opacity: 0.45;
+}
+
+.dsig-lamp,
+.dsig-halo {
+  transition:
+    r 80ms linear,
+    opacity 120ms linear,
+    fill 180ms ease;
+}
+
+.dsig-mark.ready .dsig-lamp,
+.dsig-mark.ready .dsig-halo {
+  fill: var(--s-accent);
+}
+
+/* Before the microphone delivers its first sound: a dim, unlit lamp. */
+.dsig-mark.arming .dsig-lamp {
+  fill: var(--s-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dsig-lamp,
+  .dsig-halo {
+    transition: none;
+  }
+}

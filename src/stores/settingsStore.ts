@@ -10,6 +10,7 @@ import type {
   ShortcutActivation,
   VadBackend,
   LanguageDetectionMode,
+  FixRule,
 } from "@/bindings";
 import { commands } from "@/bindings";
 import { notify } from "@/stores/noticeStore";
@@ -164,6 +165,21 @@ const settingUpdaters: {
   history_limit: (value) => commands.updateHistoryLimit(value as number),
   post_process_enabled: (value) =>
     commands.changePostProcessEnabledSetting(value as boolean),
+  post_process_timeout_secs: (value) =>
+    commands.changePostProcessTimeoutSetting(value as number),
+  dispatch_clean_up_dictation: (value) =>
+    commands.changeCleanUpDictationSetting(value as boolean),
+  dispatch_smart_spacing: (value) =>
+    commands.changeSmartSpacingSetting(value as boolean),
+  dispatch_fixes: (value) => commands.changeFixRulesSetting(value as FixRule[]),
+  dispatch_read_aloud_voice: (value) =>
+    commands.changeReadAloudVoiceSetting(value as string),
+  dispatch_read_aloud_speed: (value) =>
+    commands.changeReadAloudSpeedSetting(value as number),
+  dispatch_read_back: (value) =>
+    commands.changeReadBackSetting(value as boolean),
+  dispatch_keep_all_audio: (value) =>
+    commands.changeKeepAllAudioSetting(value as boolean),
   post_process_selected_prompt_id: (value) =>
     commands.setPostProcessSelectedPrompt(value as string),
   mute_while_recording: (value) =>

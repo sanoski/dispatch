@@ -1,13 +1,24 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Cog, FlaskConical, History, Info, Sparkles, Cpu } from "lucide-react";
-import HandyTextLogo from "./icons/HandyTextLogo";
-import HandyHand from "./icons/HandyHand";
+import {
+  Cog,
+  FlaskConical,
+  History,
+  Info,
+  AudioLines,
+  Sparkles,
+  Cpu,
+  Settings2,
+} from "lucide-react";
+import { DispatchWordmark } from "./icons/DispatchLogo";
+import { ReviewPage } from "./dispatch/review/ReviewPage";
+import { AchievementsPage } from "./dispatch/achievements/AchievementsPage";
+import { ReadAloudPage } from "./dispatch/readaloud/ReadAloudPage";
+import { AchievementsIcon } from "./dispatch/achievements/SignalLamps";
 import { useSettings } from "../hooks/useSettings";
 import {
   GeneralSettings,
   AdvancedSettings,
-  HistorySettings,
   AboutSettings,
   PostProcessingSettings,
   ModelsSettings,
@@ -34,14 +45,22 @@ interface SectionConfig {
 export const SECTIONS_CONFIG = {
   general: {
     labelKey: "sidebar.general",
-    icon: HandyHand,
+    icon: Settings2,
     component: GeneralSettings,
     enabled: () => true,
   },
   history: {
     labelKey: "sidebar.history",
     icon: History,
-    component: HistorySettings,
+    // Dispatch: the review window replaces Handy's HistorySettings.
+    component: ReviewPage,
+    enabled: () => true,
+  },
+  // Dispatch: paste text for George to read, and the read-aloud settings.
+  readaloud: {
+    labelKey: "sidebar.readAloud",
+    icon: AudioLines,
+    component: ReadAloudPage,
     enabled: () => true,
   },
   models: {
@@ -61,6 +80,13 @@ export const SECTIONS_CONFIG = {
     icon: Sparkles,
     component: PostProcessingSettings,
     enabled: (settings) => settings?.post_process_enabled ?? false,
+  },
+  // Dispatch: milestones, hidden Easter eggs and the voice data tiers.
+  achievements: {
+    labelKey: "sidebar.achievements",
+    icon: AchievementsIcon,
+    component: AchievementsPage,
+    enabled: () => true,
   },
   debug: {
     labelKey: "sidebar.debug",
@@ -93,8 +119,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     .map(([id, config]) => ({ id: id as SidebarSection, ...config }));
 
   return (
-    <div className="flex flex-col w-40 h-full border-e border-line items-center px-2">
-      <HandyTextLogo width={120} className="m-4" />
+    <div className="flex flex-col w-44 h-full border-e border-line items-center px-2 bg-[var(--color-chrome)]">
+      <DispatchWordmark className="mx-2 my-4 self-start" />
       <div className="flex flex-col w-full items-center gap-1 pt-2 border-t border-line">
         {availableSections.map((section) => {
           const Icon = section.icon;
@@ -105,7 +131,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               key={section.id}
               className={`flex gap-2 items-center p-2 w-full rounded-lg cursor-pointer transition-colors ${
                 isActive
-                  ? "bg-logo-primary/80"
+                  ? "bg-background-ui text-[var(--color-on-accent)]"
                   : "hover:bg-line hover:opacity-100 opacity-85"
               }`}
               onClick={() => onSectionChange(section.id)}

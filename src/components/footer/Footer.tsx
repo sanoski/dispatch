@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { getVersion } from "@tauri-apps/api/app";
 
 import ModelSelector from "../model-selector";
-import UpdateChecker from "../update-checker";
 import NoticeChip from "./NoticeChip";
 import TranscriptionStatus from "./TranscriptionStatus";
 
@@ -28,7 +27,7 @@ const Footer: React.FC<FooterProps> = ({ onShowHistory }) => {
   }, []);
 
   return (
-    <div className="w-full border-t border-line pt-3">
+    <div className="w-full border-t border-line pt-3 bg-[var(--color-chrome)]">
       <div className="flex justify-between items-center text-xs px-4 pb-3 text-ink-2">
         <div className="flex items-center gap-4">
           <ModelSelector />
@@ -36,12 +35,10 @@ const Footer: React.FC<FooterProps> = ({ onShowHistory }) => {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Update Status */}
+          {/* Dispatch: no update status, the updater is always off. */}
           <div className="flex items-center gap-1">
-            <UpdateChecker />
-            <span>•</span>
             {/* eslint-disable-next-line i18next/no-literal-string */}
-            <span>v{version}</span>
+            <span>Dispatch v{version}</span>
           </div>
           <NoticeChip />
         </div>

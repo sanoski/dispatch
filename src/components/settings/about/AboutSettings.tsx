@@ -53,27 +53,15 @@ export const AboutSettings: React.FC = () => {
 
         <ShowWhatsNewOnUpdate descriptionMode="tooltip" grouped={true} />
 
+        {/* Dispatch: Handy's donate button, labeled as supporting Handy.
+            Handy itself is credited under Acknowledgments. */}
         <SettingContainer
-          title={t("settings.about.supportDevelopment.title")}
-          description={t("settings.about.supportDevelopment.description")}
+          title={t("dispatch.about.support.title")}
+          description={t("dispatch.about.support.description")}
           grouped={true}
         >
-          <Button variant="primary" size="md" onClick={handleDonateClick}>
+          <Button variant="secondary" size="md" onClick={handleDonateClick}>
             {t("settings.about.supportDevelopment.button")}
-          </Button>
-        </SettingContainer>
-
-        <SettingContainer
-          title={t("settings.about.sourceCode.title")}
-          description={t("settings.about.sourceCode.description")}
-          grouped={true}
-        >
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={() => openUrl("https://github.com/cjpais/Handy")}
-          >
-            {t("settings.about.sourceCode.button")}
           </Button>
         </SettingContainer>
 
@@ -82,6 +70,34 @@ export const AboutSettings: React.FC = () => {
       </SettingsGroup>
 
       <SettingsGroup title={t("settings.about.acknowledgments.title")}>
+        <SettingContainer
+          title={t("dispatch.about.handy.title")}
+          description={t("dispatch.about.handy.description")}
+          grouped={true}
+          layout="stacked"
+        >
+          <div className="space-y-3">
+            <p className="text-sm text-ink-3">
+              {t("dispatch.about.handy.details")}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={() => openUrl("https://github.com/cjpais/Handy")}
+              >
+                {t("dispatch.about.handy.repoButton")}
+              </Button>
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={() => openUrl("https://github.com/cjpais")}
+              >
+                {t("dispatch.about.handy.authorButton")}
+              </Button>
+            </div>
+          </div>
+        </SettingContainer>
         <SettingContainer
           title={t("settings.about.acknowledgments.ggml.title")}
           description={t("settings.about.acknowledgments.ggml.description")}

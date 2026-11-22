@@ -1,0 +1,22 @@
+# Dispatch: what the public copy leaves out (HANDOFF.md, "Going public").
+# Decided with Joshua on 2026-11-22. One path per line; a trailing slash
+# means a whole folder. The publish step also renames README.dispatch.md to
+# README.md. Anything git ignores (test-clips, vendor, video, ...) is never
+# in the repo to begin with.
+
+# Private working notes and data.
+HANDOFF.md
+VIDEO.md
+ARTWORK.md
+scripts/dispatch/cleanup-bench.ts
+
+# Handy's own project files, which would mislead on Dispatch's repo: its
+# build workflows (they'd fail without Handy's signing keys), CJ's sponsor
+# button, its issue and PR templates and contributor rules, and its README.
+.github/
+README.md
+sponsor-images/
+CONTRIBUTING.md
+CONTRIBUTING_TRANSLATIONS.md
+AGENTS.md
+CLAUDE.md

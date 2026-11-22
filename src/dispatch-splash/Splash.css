@@ -1,0 +1,128 @@
+/* Dispatch: the splash screen (see Splash.tsx). Plain CSS like the read-aloud
+   pill, so this window doesn't load Tailwind and appears quickly. The art is
+   always dark, so the colors here don't follow the light theme. */
+@import "../styles/dispatch.css";
+
+.ds-splash {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #0f1720;
+  user-select: none;
+  animation: ds-in 220ms ease-out both;
+}
+
+.ds-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A faint ice-blue edge, drawn over the art. */
+.ds-splash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.2);
+  pointer-events: none;
+}
+
+/* Darkens the open sky on the left a touch, so the wordmark reads. */
+.ds-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(10, 16, 24, 0.55) 0%,
+    rgba(10, 16, 24, 0.2) 45%,
+    rgba(10, 16, 24, 0) 70%
+  );
+}
+
+.ds-brand {
+  position: absolute;
+  left: 36px;
+  top: 42px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ds-words {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ds-name {
+  font-family: "Space Grotesk Variable", "Segoe UI", sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.6px;
+  color: #f2f7fb;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+}
+
+.ds-version {
+  font-family: "Inter Variable", "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: #a9bccb;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A slim ice-blue sweep along the bottom while Dispatch loads. */
+.ds-loading {
+  position: absolute;
+  left: 36px;
+  bottom: 30px;
+  width: 132px;
+  height: 3px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(125, 211, 252, 0.16);
+}
+
+.ds-loading span {
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: 2px;
+  background: #7dd3fc;
+  box-shadow: 0 0 10px rgba(125, 211, 252, 0.8);
+  animation: ds-sweep 1.1s ease-in-out infinite;
+}
+
+@keyframes ds-in {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ds-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-splash,
+  .ds-loading span {
+    animation: none;
+  }
+}

@@ -100,11 +100,6 @@ fn finish_without_text(
 
 const CANCELLATION_POLL_INTERVAL: Duration = Duration::from_millis(25);
 
-/// Deadline for the whole post-processing step, retries included. The HTTP
-/// client only bounds connecting, so an endpoint that accepts the request and
-/// never answers would otherwise hold the dictation until a proxy gives up.
-const POST_PROCESS_TIMEOUT: Duration = Duration::from_secs(60);
-
 /// Bumped per recording session, so a late paste from an earlier session
 /// doesn't reset the tray or hide the overlay of a newer one.
 static RECORDING_SESSION: AtomicU64 = AtomicU64::new(0);
@@ -276,6 +271,7 @@ async fn post_process_transcription(
         debug!("Post-processing skipped because the selected prompt is empty");
         return PostProcessOutcome::Failed;
     }
+    let prompt = crate::dispatch::fill_prompt_placeholders(&prompt, settings);
 
     debug!(
         "Starting LLM post-processing with provider '{}' (model: {})",
@@ -467,20 +463,35 @@ pub(crate) async fn process_transcription_output(
     let mut post_process_failed = false;
 
     if post_process {
+        // Deadline for the whole post-processing step, retries included. The
+        // HTTP client only bounds connecting, so an endpoint that accepts the
+        // request and never answers would otherwise hold the dictation.
+        // Dispatch makes it a setting (default 3 s) so a slow model never
+        // delays the paste for long.
+        let post_process_timeout = crate::dispatch::post_process_timeout(&settings);
         // A reply that's blank once cleaned is no better than none.
         let outcome = match tokio::time::timeout(
-            POST_PROCESS_TIMEOUT,
+            post_process_timeout,
             post_process_transcription(&settings, &final_text),
         )
         .await
         {
-            Ok(PostProcessOutcome::Done(text)) => non_blank_post_processed_text(text)
-                .map_or(PostProcessOutcome::Failed, PostProcessOutcome::Done),
+            Ok(PostProcessOutcome::Done(text)) => match non_blank_post_processed_text(text) {
+                // Dispatch: a cleanup that drops a name isn't used; what was
+                // heard is pasted instead (dispatch_names.rs).
+                Some(text)
+                    if !crate::dispatch::cleanup_keeps_names(&settings, &final_text, &text) =>
+                {
+                    PostProcessOutcome::Skipped
+                }
+                Some(text) => PostProcessOutcome::Done(text),
+                None => PostProcessOutcome::Failed,
+            },
             Ok(outcome) => outcome,
             Err(_) => {
                 warn!(
                     "Post-processing timed out after {:?}; pasting the original transcription",
-                    POST_PROCESS_TIMEOUT
+                    post_process_timeout
                 );
                 PostProcessOutcome::Failed
             }
@@ -517,6 +528,9 @@ impl ShortcutAction for TranscribeAction {
     fn start(&self, app: &AppHandle, binding_id: &str, _shortcut_str: &str) {
         let start_time = Instant::now();
         debug!("TranscribeAction::start called for binding: {}", binding_id);
+        if crate::dispatch::should_clean_up(&get_settings(app), self.post_process) {
+            crate::dispatch::warm_up_cleanup_model(app);
+        }
 
         // Load model in the background
         let tm = app.state::<Arc<TranscriptionManager>>();
@@ -736,7 +750,7 @@ impl ShortcutAction for TranscribeAction {
         play_feedback_sound(app, SoundType::Stop);
 
         let binding_id = binding_id.to_string(); // Clone binding_id for the async task
-        let post_process = self.post_process;
+        let post_process = crate::dispatch::should_clean_up(&get_settings(app), self.post_process);
         let cancel_generation = rm.cancel_generation();
 
         tauri::async_runtime::spawn(async move {
@@ -1106,6 +1120,10 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
     map.insert(
         "test".to_string(),
         Arc::new(TestAction) as Arc<dyn ShortcutAction>,
+    );
+    map.insert(
+        crate::dispatch_tts::BINDING_ID.to_string(),
+        Arc::new(crate::dispatch_tts::ReadAloudAction) as Arc<dyn ShortcutAction>,
     );
     map
 });

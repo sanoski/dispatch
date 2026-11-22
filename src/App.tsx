@@ -36,6 +36,9 @@ import { commands } from "@/bindings";
 import { deleteRetiredModel } from "@/lib/models/retired";
 import { NoticePanel } from "@/components/notices/NoticePanel";
 import { getLanguageDirection, initializeRTL } from "@/lib/utils/rtl";
+import { UnlockPopup } from "@/components/dispatch/achievements/UnlockPopup";
+import { useOpenPageRequests } from "@/components/dispatch/useOpenPageRequests";
+import { useMainWindowReady } from "@/components/dispatch/useMainWindowReady";
 
 // flow is first-run onboarding; the rest are single screens for returning users.
 type OnboardingStep =
@@ -85,6 +88,12 @@ function App() {
   const [currentSection, setCurrentSection] =
     useState<SidebarSection>("general");
   const showHistory = useCallback(() => setCurrentSection("history"), []);
+  const showAchievements = useCallback(
+    () => setCurrentSection("achievements"),
+    [],
+  );
+  useOpenPageRequests(setCurrentSection);
+  useMainWindowReady();
   const { settings, updateSetting } = useSettings();
   const direction = getLanguageDirection(i18n.language);
   const refreshAudioDevices = useSettingsStore(
@@ -335,7 +344,7 @@ function App() {
             <div ref={settingsScrollRef} className="flex-1 overflow-y-auto">
               {/* Models fills the window: its table scrolls, not the page. */}
               <div
-                className={`flex flex-col items-center p-4 gap-4 ${currentSection === "models" ? "h-full" : ""}`}
+                className={`flex flex-col items-center p-4 gap-4 ${currentSection === "models" || currentSection === "history" ? "h-full" : ""}`}
               >
                 <SecureInputWarning />
                 {renderSettingsContent(
@@ -352,6 +361,7 @@ function App() {
         {/* Fixed footer at bottom */}
         <Footer onShowHistory={showHistory} />
         <FileDropOverlay onDropped={showHistory} />
+        <UnlockPopup onView={showAchievements} />
       </div>
     );
   }

@@ -23,6 +23,10 @@ export default defineConfig(async () => ({
       input: {
         main: resolve(__dirname, "index.html"),
         overlay: resolve(__dirname, "src/overlay/index.html"),
+        // Dispatch: the read-aloud pill (src-tauri/src/dispatch_reading_pill.rs).
+        dispatchReading: resolve(__dirname, "src/dispatch-reading/index.html"),
+        // Dispatch: the splash screen (src-tauri/src/dispatch_splash.rs).
+        dispatchSplash: resolve(__dirname, "src/dispatch-splash/index.html"),
       },
     },
   },

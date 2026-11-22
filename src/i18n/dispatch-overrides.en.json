@@ -1,0 +1,471 @@
+{
+  "sidebar": {
+    "postProcessing": "Cleanup",
+    "achievements": "Achievements",
+    "readAloud": "Read Aloud"
+  },
+  "settings": {
+    "general": {
+      "shortcut": {
+        "bindings": {
+          "transcribe_with_post_process": {
+            "name": "Cleanup Hotkey",
+            "description": "Optional: A dedicated hotkey that cleans up your transcription with AI before pasting it."
+          },
+          "dispatch_read_aloud": {
+            "name": "Read Aloud Shortcut",
+            "description": "Select text in any app and press this to hear it read aloud. Press it again to stop."
+          }
+        }
+      }
+    },
+    "postProcessing": {
+      "prompts": {
+        "createFirst": "Click 'Create New Prompt' above to create your first cleanup prompt."
+      }
+    },
+    "debug": {
+      "postProcessingToggle": {
+        "label": "Cleanup"
+      }
+    }
+  },
+  "errors": {
+    "postProcessFailedTitle": "Pasted Without Cleanup",
+    "postProcessFailed": "Cleanup didn't finish, so the transcript was pasted as is.",
+    "filePostProcessFailedTitle": "Transcribed Without Cleanup",
+    "filePostProcessFailed": "Cleanup didn't finish, so the transcript was saved as is."
+  },
+  "dispatch": {
+    "review": {
+      "title": "History",
+      "listLabel": "Dictations",
+      "count_one": "{{count}} dictation",
+      "count_other": "{{count}} dictations",
+      "search": "Search dictations",
+      "filters": {
+        "label": "Show",
+        "all": "All",
+        "cleaned": "Cleaned",
+        "fixed": "Fixed by you",
+        "checked": "Checked",
+        "starred": "Starred"
+      },
+      "noMatches": "No dictations match.",
+      "pickOne": "Pick a dictation to review it.",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "at": "{{day}} at {{time}}",
+      "itemMeta": "{{time}} · {{length}}",
+      "back": "Back to the list",
+      "confirmDelete": "Click again to delete",
+      "loadFailed": "Couldn't load this dictation's recording.",
+      "chips": {
+        "cleaned": "Cleaned",
+        "fixes_one": "{{count}} fix",
+        "fixes_other": "{{count}} fixes",
+        "timedByParakeet": "Word times from Parakeet",
+        "timesEstimated": "Word times estimated",
+        "checked": "Checked"
+      },
+      "player": {
+        "label": "Recording",
+        "play": "Play",
+        "pause": "Pause",
+        "position": "Playback position",
+        "speed": "Playback speed {{speed}}x, click to change",
+        "speedValue": "{{speed}}×",
+        "ofDuration": "/ {{duration}}",
+        "showTimes": "Show timestamps",
+        "quiet": "Quiet background",
+        "quietHint": "Plays a copy with background noise turned down. The recording itself isn't changed.",
+        "quieting": "Quieting the background…",
+        "quietFailed": "Couldn't quiet the background, so this plays as recorded"
+      },
+      "transcriptLabel": "Transcript",
+      "tabs": {
+        "label": "Transcript version",
+        "cleaned": "Cleaned",
+        "heard": "What Dispatch heard"
+      },
+      "hint": "Click a word to hear it. Shift-click to pick several. Double-click to fix it.",
+      "hintCleaned": "The tidied-up text that was pasted. Click a word to hear it. Fixes are made in What Dispatch heard.",
+      "fixInHeard": "Fix in What Dispatch heard",
+      "word": {
+        "fixedFrom": "You fixed this. Dispatch heard \"{{heard}}\"."
+      },
+      "selected": {
+        "nothing": "No word picked",
+        "none": "Pick a word to hear it, or to fix it if Dispatch misheard you.",
+        "range": "{{start}} – {{end}}",
+        "fixed": "You fixed this. Dispatch heard \"{{heard}}\".",
+        "addedByCleanup": "Cleanup added this, so there's nothing Dispatch heard to fix here.",
+        "fixInHeard": "To fix it, go to What Dispatch heard. That's the text voice training learns from.",
+        "estimated": "This time is estimated, so it may be a little off.",
+        "aligned": "Playing with half a second either side."
+      },
+      "playWord": "Play word",
+      "fixButton": "Fix",
+      "fix": {
+        "title": "Fix what Dispatch heard",
+        "heard": "Dispatch heard",
+        "meant": "You meant",
+        "everyTime": "Fix this every time",
+        "everyTimeDescription": "Adds \"{{heard}}\" → \"{{meant}}\" to your Fix-It List.",
+        "everyTimeUnavailable": "Type what you meant to add it to your Fix-It List too.",
+        "everyTimeSameWords": "Only the punctuation or capitals changed, so there's no rule to add.",
+        "everyTimeRisky": "Careful: this changes every \"{{heard}}\" to \"{{meant}}\" in all your dictations from now on. Usually only worth it for a word Dispatch always gets wrong.",
+        "note": "The fixed text is saved with this recording, so your voice model learns from it.",
+        "cancel": "Cancel",
+        "save": "Save fix",
+        "saved": "Fix saved",
+        "savedWithRule": "Fix saved and added to your Fix-It List",
+        "error": "Couldn't save the fix",
+        "everyTimeHelpTitle": "When to fix it every time",
+        "everyTimeHelp": "Tick this for a word Dispatch gets wrong the same way again and again, like \"quad code\" for \"Claude Code\". It adds a rule to your Fix-It List that changes it in every dictation from now on. Leave it off for one-off mistakes, and for real words you might also say, like \"spanner\"."
+      },
+      "empty": {
+        "title": "No dictations yet",
+        "before": "Hold",
+        "plus": "+",
+        "after": "and start talking. Every dictation lands here with its audio, so you can replay any word and fix it."
+      },
+      "noAudio": "This recording wasn't kept, so there's nothing to play. Its words can still be read, checked and fixed.",
+      "checked": {
+        "button": "Looks right",
+        "done": "Checked",
+        "hint": "The text is exactly what you said. Checked dictations are what Dispatch will learn your voice from.",
+        "undoHint": "Checked. Click to take the mark off.",
+        "error": "Couldn't save the mark"
+      }
+    },
+    "readAloud": {
+      "title": "Read Aloud",
+      "voice": {
+        "label": "Voice",
+        "description": "The voice that reads your text. All voices run on this PC, offline.",
+        "option": "{{name}} ({{accent}}, {{gender}})",
+        "american": "American",
+        "british": "British",
+        "female": "female",
+        "male": "male",
+        "play": "Play sample",
+        "playLabel": "Play a sample of {{voice}}"
+      },
+      "speed": {
+        "label": "Speed",
+        "description": "How fast the text is read. 1.0x is normal speed."
+      },
+      "page": {
+        "title": "Read Aloud",
+        "subtitle": "Paste anything here and George reads it to you.",
+        "orHotkey": "Or select text in any app and press",
+        "boxLabel": "Text to read aloud",
+        "placeholder": "Paste or type something to hear it read aloud.",
+        "shortcutHint": "Ctrl+Enter plays it too.",
+        "length": "{{words}} · {{time}}",
+        "words_one": "{{count, number}} word",
+        "words_other": "{{count, number}} words",
+        "underAMinute": "under a minute",
+        "minutes_one": "about {{count}} minute",
+        "minutes_other": "about {{count}} minutes",
+        "clear": "Clear",
+        "play": "Play",
+        "stop": "Stop",
+        "warming": "Warming up",
+        "needsVoice": "Download George's voice first"
+      },
+      "readBack": {
+        "label": "Read Back Each Dictation",
+        "description": "After each dictation is pasted, George reads it back so you can catch mistakes by ear. Press the read-aloud hotkey to stop him."
+      },
+      "setup": {
+        "title": "Download George's voice",
+        "explain": "Read aloud runs entirely on this computer. George's voice is a one-time {{size}} MB download from Hugging Face, checked before it's used.",
+        "devCopy": "This dev build is using the copy in vendor/kokoro for now. Downloading puts Dispatch's own copy in its data folder, the way an installed Dispatch gets it.",
+        "download": "Download ({{size}} MB)",
+        "resume": "Resume download",
+        "cancel": "Cancel",
+        "progressLabel": "Downloading George's voice",
+        "progress": "{{done}} of {{total}} MB · {{percent}}%",
+        "failed": "The download stopped: {{error}}. Resume to pick up where it left off."
+      }
+    },
+    "fixItList": {
+      "title": "Fix-It List",
+      "description": "Words Dispatch mishears the same way every time, and what you meant. Fixed in every dictation before it's pasted, and shared with the cleanup model.",
+      "heardPlaceholder": "Dispatch hears",
+      "meantPlaceholder": "You meant",
+      "add": "Add",
+      "remove": "Remove the fix for {{heard}}",
+      "duplicate": "There's already a fix for \"{{heard}}\""
+    },
+    "smartSpacing": {
+      "label": "Smart Spacing",
+      "description": "Add a space before dictated text when the cursor is right after a word, so back-to-back dictations don't run together. Works in apps that report their text to Windows accessibility."
+    },
+    "cleanUpDictation": {
+      "label": "Clean Up Dictation",
+      "description": "Run every dictation through the cleanup model before pasting. Turn off to paste exactly what you said."
+    },
+    "cleanupSetup": {
+      "noOllamaTitle": "AI cleanup needs Ollama",
+      "noModelTitle": "AI cleanup needs its model",
+      "noOllama": "Cleanup removes filler words and fixes punctuation with a small AI model that runs on your computer, through Ollama. It's off until Ollama is set up, so your dictations paste exactly as you said them.",
+      "noModel": "Ollama is running, but the cleanup model ({{model}}) isn't downloaded yet. Cleanup is off until it is, so your dictations paste exactly as you said them.",
+      "stepOne": "1.",
+      "stepTwo": "2.",
+      "install": "Install Ollama.",
+      "getOllama": "Get Ollama",
+      "pull": "Download the cleanup model: in a terminal, run",
+      "copy": "Copy command",
+      "checkAgain": "Check again",
+      "checking": "Checking...",
+      "autoCheck": "Dispatch also checks each time it starts.",
+      "stillMissing": "Still not found. Make sure Ollama is running, then check again.",
+      "ready": "Ollama found. AI cleanup is on."
+    },
+    "about": {
+      "handy": {
+        "title": "Handy",
+        "description": "The open source app Dispatch is built on, created by CJ Pais",
+        "details": "Dispatch started as a fork of Handy, the free and open source speech-to-text app created by CJ Pais. Handy does the hard parts: the global shortcuts, recording, fast local transcription with models like Whisper and Parakeet, and pasting the text into whatever app you're using. Dispatch adds AI cleanup and a few personal touches on top. Handy is released under the MIT license. Thank you, CJ, for building it and sharing it with everyone.",
+        "repoButton": "Handy on GitHub",
+        "authorButton": "CJ Pais on GitHub"
+      },
+      "support": {
+        "title": "Support Handy",
+        "description": "Donate to CJ Pais to support Handy's development."
+      }
+    },
+    "achievements": {
+      "title": "Achievements",
+      "subtitle": "Milestones you reach, and a few odd things you might stumble into.",
+      "unlocked": "unlocked",
+      "ofTotal": "/ {{total}}",
+      "hiddenLeft": "hidden left to find",
+      "loadFailed": "Achievements couldn't be loaded. Try reopening this page.",
+      "mystery": "Hidden ones stay a mystery until you find them.",
+      "secretTitle": "???",
+      "noHint": "No hints for this one.",
+      "noHintEither": "No hints for this one either.",
+      "filters": {
+        "label": "Show",
+        "all": "All {{count}}",
+        "unlocked": "Unlocked",
+        "locked": "Locked",
+        "hidden": "Hidden"
+      },
+      "sections": {
+        "milestones": "Milestones",
+        "habits": "Habits",
+        "features": "Features",
+        "hiddenFound": "Hidden · {{found}} of {{total}} found"
+      },
+      "tag": {
+        "unlocked": "Unlocked {{date}}",
+        "found": "Found {{date}}",
+        "locked": "Locked",
+        "hidden": "Hidden"
+      },
+      "lamp": {
+        "lit": "Signal lit: unlocked",
+        "locked": "Signal dark: locked",
+        "hidden": "Signal dark: hidden"
+      },
+      "voice": {
+        "eyebrow": "Voice data for your own model",
+        "soFar": "recorded so far",
+        "explain": "Every dictation saves its audio next to its text. That pair is what a fine-tune learns your voice from.",
+        "pace": "At your pace, about {{amount}} a day",
+        "eta_one": "{{tier}} in about a day",
+        "eta_other": "{{tier}} in about {{count}} days",
+        "allTiers": "Every tier reached",
+        "noPace": "Dictate to start filling it",
+        "barLabel": "Recorded so far: {{recorded}}. {{tier}}",
+        "tierAmount": "· {{amount}}",
+        "reached": "Reached {{date}}",
+        "toGo": "{{amount}} to go",
+        "locked": "Locked",
+        "recorded": "Recorded",
+        "checked": "Fixed in the review window: {{amount}}",
+        "checkedNone": "Fixed in the review window: none yet",
+        "stats": "{{dictations}} · {{words}} · {{days}}",
+        "dictations_one": "{{count}} dictation",
+        "dictations_other": "{{count}} dictations",
+        "words_one": "{{count, number}} word",
+        "words_other": "{{count, number}} words",
+        "days_one": "{{count}} day",
+        "days_other": "{{count}} days",
+        "notKept": "Voice data isn't tracked, because Dispatch keeps only your newest recordings. To train Dispatch on your voice later, choose Keep all recordings in Settings, Advanced."
+      },
+      "tiers": {
+        "tier_1": {
+          "name": "Tier 1",
+          "amount": "30 min",
+          "meaning": "A first test run of the fine-tune"
+        },
+        "tier_2": {
+          "name": "Tier 2",
+          "amount": "2 hours",
+          "meaning": "The first model worth using every day"
+        },
+        "tier_3": {
+          "name": "Tier 3",
+          "amount": "5 hours",
+          "meaning": "A solid personal model"
+        },
+        "tier_4": {
+          "name": "Tier 4",
+          "amount": "10 hours",
+          "meaning": "Ironclad. More helps less after this"
+        }
+      },
+      "popup": {
+        "unlocked": "Achievement unlocked",
+        "hidden": "Hidden achievement found · {{found}} of {{total}}",
+        "tier": "Voice data tier reached",
+        "tierTitle": "{{tier}} · {{amount}}",
+        "many_one": "{{count}} achievement unlocked",
+        "many_other": "{{count}} achievements unlocked",
+        "manyTitle": "You've been busy",
+        "view": "View",
+        "dismiss": "Dismiss"
+      },
+      "items": {
+        "first_words": {
+          "title": "First Words",
+          "desc": "Your first dictation with Dispatch."
+        },
+        "getting_rolling": {
+          "title": "Getting Rolling",
+          "desc": "Dictate 100 times.",
+          "progress": "{{have}} / {{need}}"
+        },
+        "thousand_club": {
+          "title": "Thousand Club",
+          "desc": "Dictate 1,000 times.",
+          "progress": "{{have}} / {{need}}"
+        },
+        "wordsmith": {
+          "title": "Wordsmith",
+          "desc": "Dictate 10,000 words.",
+          "progress": "{{have}} / {{need}} words"
+        },
+        "novelist": {
+          "title": "Novelist",
+          "desc": "Dictate 50,000 words, about the length of a novel.",
+          "progress": "{{have}} / {{need}} words"
+        },
+        "marathon": {
+          "title": "Marathon",
+          "desc": "One dictation longer than three minutes."
+        },
+        "on_a_roll": {
+          "title": "On a Roll",
+          "desc": "Dictate on 7 days in a row.",
+          "progress": "{{have}} / {{need}} days"
+        },
+        "regular": {
+          "title": "Regular",
+          "desc": "Dictate on 30 days in a row.",
+          "progress": "{{have}} / {{need}} days"
+        },
+        "proofreader": {
+          "title": "Proofreader",
+          "desc": "Have George read your text aloud."
+        },
+        "fixer": {
+          "title": "Fixer",
+          "desc": "Add your own rule to the Fix-It List."
+        },
+        "course_correction": {
+          "title": "Course Correction",
+          "desc": "Fix a word in the review window."
+        },
+        "all_aboard": {
+          "title": "All Aboard",
+          "desc": "Called it like a conductor.",
+          "hint": "Railroad talk might help."
+        },
+        "pizza_in_the_oven": {
+          "title": "Pizza in the Oven",
+          "desc": "Not the ocean this time.",
+          "hint": "Not the ocean this time."
+        },
+        "might_could": {
+          "title": "Might Could",
+          "desc": "Said it the way you say it, and Dispatch kept it.",
+          "hint": "Say it your way."
+        },
+        "night_shift": {
+          "title": "Night Shift",
+          "desc": "Dictated between 2 and 4 in the morning.",
+          "hint": "Burn the midnight oil."
+        },
+        "quad_code_no_more": {
+          "title": "Quad Code No More",
+          "desc": "The Fix-It List turned \"quad code\" into Claude Code ten times.",
+          "hint": "Old habits, new spelling."
+        },
+        "speed_talker": {
+          "title": "Speed Talker",
+          "desc": "Over 200 words a minute.",
+          "hint": "Faster than an auctioneer."
+        },
+        "pushing_his_buttons": {
+          "title": "Pushing His Buttons",
+          "desc": "Pestered George until he went on his tea break."
+        },
+        "bedtime_story": {
+          "title": "Bedtime Story",
+          "desc": "George read to you for over five minutes in one go."
+        }
+      }
+    },
+    "readingPill": {
+      "reading": "Reading aloud",
+      "voiceTime": "{{voice}} · {{time}}",
+      "warming": "Warming up {{voice}}",
+      "nothingSelected": "Select some text first",
+      "stop": "Stop",
+      "stopLabel": "Stop reading",
+      "needsVoice": "George's voice isn't downloaded yet",
+      "setUp": "Set up"
+    },
+    "recordings": {
+      "error": "Couldn't change how recordings are kept",
+      "underAMinute": "under a minute",
+      "minutes_one": "{{count}} minute",
+      "minutes_other": "{{count}} minutes",
+      "hours_one": "{{count}} hour",
+      "hours_other": "{{count}} hours",
+      "hoursMinutes_one": "{{hours}} h {{count}} minute",
+      "hoursMinutes_other": "{{hours}} h {{count}} minutes",
+      "setting": {
+        "title": "Keep Recordings",
+        "description": "Every recording can be replayed in History and used later to train Dispatch on your voice. Transcripts are always kept, and starred dictations keep their audio."
+      },
+      "options": {
+        "all": "Keep all recordings",
+        "newest": "Keep the newest {{count}}"
+      },
+      "confirm": {
+        "title_one": "Move {{count}} old recording to the Recycle Bin?",
+        "title_other": "Move {{count}} old recordings to the Recycle Bin?",
+        "body_one": "Dispatch will keep your {{kept}} newest recordings and move the other one ({{length}}, {{size}}) to the Recycle Bin. Its transcript stays in History.",
+        "body_other": "Dispatch will keep your {{kept}} newest recordings and move the other {{count}} ({{length}}, {{size}}) to the Recycle Bin. Their transcripts stay in History, and starred dictations keep their audio.",
+        "note": "You can restore them from the Recycle Bin. Recordings that aren't kept can't be replayed here or used to train Dispatch on your voice.",
+        "cancel": "Keep everything",
+        "confirm": "Move to Recycle Bin"
+      },
+      "question": {
+        "title": "Keep your recordings?",
+        "body": "Dispatch keeps the audio of every dictation, so you can replay any of them here and, later, train Dispatch on your voice. That's about 2 MB per minute of talking. Transcripts are kept either way.",
+        "later": "You can change this any time in Settings, Advanced.",
+        "keepAll": "Keep them all",
+        "newest": "Keep only the newest {{count}}"
+      }
+    }
+  }
+}

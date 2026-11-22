@@ -11,6 +11,7 @@ import type {
   StreamWorkKind,
 } from "@/bindings";
 import { NoticeBadgeIcon } from "@/components/icons/NoticeBadgeIcon";
+import { SignalMark } from "@/components/dispatch/overlay/SignalMark";
 import i18n, { syncLanguageFromSettings } from "@/i18n";
 import { noticeDisplay } from "@/lib/notices";
 import type { ModelStateEvent } from "@/lib/types/events";
@@ -314,10 +315,13 @@ const RecordingOverlay: React.FC = () => {
   // pill & panel, so the Live morph is a pure width change.
   const listeningRow = (showTimer: boolean, showCancel: boolean) => (
     <div className="sbase">
-      <div className="sbase-l">
-        <span className={`sdot ${captureReady ? "ready" : "arming"}`} />
+      {/* Dispatch: a crossing signal in place of the dot, its lamp
+          glowing into the bars (components/dispatch/overlay). */}
+      <div className="sbase-l" />
+      <div className="dsig">
+        <SignalMark ready={captureReady} levels={levels} />
+        {waveform}
       </div>
-      {waveform}
       <div className="sbase-r">
         {showTimer && <span className="stimer">{fmtTime(elapsed)}</span>}
         {showCancel && cancelBtn}
