@@ -14,6 +14,8 @@
 
 Dispatch runs entirely on your computer. Your voice, your recordings and your text never leave it.
 
+**[⬇ Download Dispatch for Windows](../../releases/latest)**: on the release page, under **Assets**, click the file ending in **`-setup.exe`**. (Windows 10 and 11, 64-bit. See [Install](#install) for the one warning Windows shows.)
+
 Dispatch is a fork of [Handy](https://github.com/cjpais/Handy) by [CJ Pais](https://github.com/cjpais), a free and open source speech-to-text app. Handy does the hard part: recording, speech recognition with Whisper and Parakeet, and pasting into any app. Dispatch builds on it with a review window for your dictations, a Fix-It List, optional AI cleanup, read aloud, and a railroad look. If you want a simpler, cross-platform tool, use Handy.
 
 ![The History review window: a dictation's waveform, with "Claude Code" picked in the transcript after fixing what Dispatch first heard as "quad code"](docs/dispatch/history.png)
